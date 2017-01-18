@@ -94,6 +94,43 @@ function getMaxArea(hist) {
     return max_area;
 }
 
-console.log(largestRectange([6, 2, 5, 4, 5, 1, 6]) === 12);
-console.log(largestRectange([2, 5, 4, 2, 3, 2, 5]) === 14);
-console.log(largestRectange([2, 5, 2, 2, 6, 6, 6, 3]) === 18);
+var largestRectangleArea = function(heights) {
+    var stack = [];
+    var maxArea = 0;
+
+    var i = 0;
+    while (i < heights.length) {
+        debugger
+        var newHeight = heights[i];
+        var previousHeight = heights[stack[stack.length - 1]] || 0;
+        if (stack.length === 0 || newHeight >= previousHeight) {
+            stack.push(i);
+            i = i + 1;
+        } else {
+            stack.pop();
+            var breadth;
+            if (stack.length === 0) {
+                breadth = i;
+            } else {
+                breadth = i - stack[stack.length - 1] - 1;
+            }
+            if (previousHeight * breadth > maxArea) maxArea = previousHeight * breadth;
+        }
+    }
+
+    while (stack.length > 0) {
+        previousHeight = stack.pop();
+        if (stack.length === 0) {
+            breadth = i;
+        } else {
+            breadth = i - stack[stack.length - 1] - 1;
+        }
+        if (previousHeight * breadth > maxArea) maxArea = previousHeight * breadth;
+    }
+
+    return maxArea;
+};
+
+console.log(largestRectangleArea([6, 2, 5, 4, 5, 1, 6]) === 12);
+// console.log(largestRectange([2, 5, 4, 2, 3, 2, 5]) === 14);
+// console.log(largestRectange([2, 5, 2, 2, 6, 6, 6, 3]) === 18);
